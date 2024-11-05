@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from './supabase';
 import { FaEdit } from 'react-icons/fa';
-import { Link } from 'react-router-dom'; // Import Link for navigation
-import './dataDisplay.css';
+import { Link } from 'react-router-dom'; 
 import Filter from './filter';
 import Header from './TopBar';
 
@@ -12,11 +11,11 @@ const DataDisplay = () => {
     const [selectedAgent, setSelectedAgent] = useState({});
     const [selectedStage, setSelectedStage] = useState({});
     const [editMode, setEditMode] = useState({});
-    
+
     const [agentFilter, setAgentFilter] = useState('');
     const [stageFilter, setStageFilter] = useState('');
 
-    const agents = ['Abdallah', 'Azam', 'Ishaak', 'Dilshard', 'Shanilka', 'Thabith', 'Thanish', 'Zubair'];
+    const agents = ['Select Agent','Abdallah', 'Azam', 'Ishaak', 'Dilshard', 'Shanilka', 'Thabith', 'Thanish', 'Zubair'];
     const stages = [
         'New Inquiry',
         'Initial Contact',
@@ -52,7 +51,7 @@ const DataDisplay = () => {
         const updates = {};
         if (selectedAgent[itemId]) updates.Agent = selectedAgent[itemId];
         if (selectedStage[itemId]) updates.Stage = selectedStage[itemId];
-        
+
         const { error } = await supabase
             .from('WebsiteInquiries')
             .update(updates)
@@ -98,7 +97,7 @@ const DataDisplay = () => {
 
     return (
         <div className="container mt-5">
-            <Header/>
+            <Header />
             <h1 className="text-center">Dashboard</h1>
             {error && <div className="alert alert-danger">{error}</div>}
             
@@ -134,20 +133,55 @@ const DataDisplay = () => {
                             <td>{item.Email}</td>
                             <td>{item.Phone}</td>
                             <td>{formatDate(item.Date)}</td>
-                            <td>{item.Stage}</td>
-                            <td>{item.Agent}</td>
+                            <td>
+                                {editMode[item.id] ? (
+                                    <select
+                                        value={selectedStage[item.id] || item.Stage}
+                                        onChange={(e) => setSelectedStage((prev) => ({ ...prev, [item.id]: e.target.value }))}
+                                    >
+                                        {stages.map((stage) => (
+                                            <option key={stage} value={stage}>{stage}</option>
+                                        ))}
+                                    </select>
+                                ) : (
+                                    item.Stage
+                                )}
+                            </td>
+                            <td>
+                                {editMode[item.id] ? (
+                                    <select
+                                        value={selectedAgent[item.id] || item.Agent}
+                                        onChange={(e) => setSelectedAgent((prev) => ({ ...prev, [item.id]: e.target.value }))}
+                                    >
+                                        {agents.map((agent) => (
+                                            <option key={agent} value={agent}>{agent}</option>
+                                        ))}
+                                    </select>
+                                ) : (
+                                    item.Agent
+                                )}
+                            </td>
                             <td>{item.Make}</td>
                             <td>{item.Model}</td>
                             <td>
                                 <Link to={`/details/${item.id}`} className="btn btn-info btn-sm">
                                     Expand
                                 </Link>
-                                <button
-                                    className="btn btn-outline-primary btn-sm ms-2"
-                                    onClick={() => toggleEditMode(item.id)}
-                                >
-                                    <FaEdit /> Edit
-                                </button>
+                                {editMode[item.id] ? (
+                                    <button
+                                        className="btn btn-success btn-sm ms-2"
+                                        onClick={() => handleSave(item.id)}
+                                    >
+                                        Save
+                                    </button>
+                                ) : (
+                                    <button
+                                        className="btn btn-outline-primary btn-sm ms-2"
+                                        onClick={() => toggleEditMode(item.id)}
+                                    >
+                                        <FaEdit /> Edit
+                                    </button>
+                                )}
                             </td>
                         </tr>
                     ))}
@@ -158,6 +192,7 @@ const DataDisplay = () => {
 };
 
 export default DataDisplay;
+
 
 
 
