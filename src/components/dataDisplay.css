@@ -1,120 +1,101 @@
-/* General styles */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa; /* Light background for better contrast */
-    color: #343a40; /* Dark text color for readability */
-}
-
+/* Container Styles */
 .container {
-    padding: 20px; /* Add padding around the container */
+    margin-top: 2rem;
 }
 
-h1 {
-    margin-bottom: 30px; /* Increase spacing below the title */
+/* Table Styles */
+.table {
+    width: 100%;
+    border-collapse: collapse; /* Ensure no space between borders */
 }
 
-/* Card styles */
-.card {
-    transition: transform 0.3s, box-shadow 0.3s; /* Smooth transition effects */
-    border-radius: 8px; /* Rounded corners for a modern look */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
-    overflow: hidden; /* Hides overflow content */
+.table th,
+.table td {
+    border: 1px solid #dee2e6; /* Table border */
+    padding: 8px; /* Cell padding */
+    text-align: left; /* Left align text */
+    vertical-align: middle; /* Center vertically */
 }
 
-.card:hover {
-    transform: scale(1.05); /* Scale effect on hover for interactivity */
+/* Header Styles */
+.table thead {
+    background-color: #f8f9fa; /* Light gray background for the header */
 }
 
-/* Background colors for different stages */
-.bg-pastel-light {
-    background-color: #f7d6d6; /* Light Pink */
+/* Row Styles by Stage */
+.row-new-inquiry {
+    background-color: #e7f1ff; /* Light blue for New Inquiry */
 }
 
-.bg-pastel-blue {
-    background-color: #d6e4f7; /* Light Blue */
+.row-initial-contact {
+    background-color: #fff3cd; /* Light yellow for Initial Contact */
 }
 
-.bg-pastel-green {
-    background-color: #d6f7d6; /* Light Green */
+.row-follow-up {
+    background-color: #fff5db; /* Light beige for Follow Up */
 }
 
-.bg-pastel-yellow {
-    background-color: #f7f3d6; /* Light Yellow */
+.row-offers-made {
+    background-color: #d4edda; /* Light green for Offers Made */
 }
 
-.bg-pastel-orange {
-    background-color: #f7d6c6; /* Light Orange */
+.row-negotiating {
+    background-color: #fce1e1; /* Light red for Negotiating */
 }
 
-.bg-pastel-teal {
-    background-color: #d6f7f3; /* Light Teal */
+.row-sold {
+    background-color: #d1ecf1; /* Light cyan for Sold */
 }
 
-.bg-pastel-purple {
-    background-color: #e8d6f7; /* Light Purple */
+.row-closed {
+    background-color: #f8d7da; /* Light pink for Closed */
 }
 
-/* Card content */
-.card-body {
-    padding: 20px; /* Uniform padding inside cards */
-}
-
-.card-title {
-    font-size: 1.25rem; /* Larger font for card title */
-    margin-bottom: 10px; /* Space below title */
-}
-
-.card-text {
-    font-size: 0.9rem; /* Smaller font size for card text */
-    line-height: 1.5; /* Better line height for readability */
-}
-
-/* Button styles */
+/* Button Styles */
 .btn {
-    border-radius: 5px; /* Rounded button corners */
-    padding: 8px 12px; /* Padding for better touch targets */
-    font-size: 0.875rem; /* Adjusted font size for buttons */
-}
-
-.btn-outline-primary {
-    color: #007bff; /* Primary color for outline button */
-    border-color: #007bff; /* Border color for outline button */
-}
-
-.btn-outline-primary:hover {
-    background-color: #007bff; /* Background color on hover */
-    color: white; /* White text on hover */
+    font-size: 0.85rem; /* Smaller font size for buttons */
+    padding: 5px 8px; /* Reduced padding for smaller buttons */
+    height: 30px; /* Fixed height for alignment */
+    display: flex; /* Use flexbox for centering content */
+    align-items: center; /* Center items vertically */
 }
 
 .btn-success {
-    background-color: #28a745; /* Success color */
-    border-color: #28a745; /* Border color for success button */
+    background-color: #28a745; /* Green background */
+    color: white; /* White text */
 }
 
 .btn-danger {
-    background-color: #dc3545; /* Danger color */
-    border-color: #dc3545; /* Border color for danger button */
+    background-color: #dc3545; /* Red background */
+    color: white; /* White text */
 }
 
-/* Select and textarea styles */
-.form-select,
-.form-control {
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px; /* Padding for better usability */
-    font-size: 0.875rem; /* Adjusted font size for input elements */
+.btn-outline-primary {
+    border: 1px solid #007bff; /* Blue border for outline */
+    color: #007bff; /* Blue text */
 }
 
-/* Expanded card styles */
-.card.expanded {
-    height: auto; 
-    z-index: 1000; /* Ensure expanded card is above others */
-    scale: 1.20;
+/* Additional styles for button hover effects */
+.btn:hover {
+    opacity: 0.8; /* Slightly transparent on hover */
 }
 
-/* Responsive styles */
-@media (max-width: 768px) {
-    .card {
-        height: auto; /* Allow cards to expand naturally on mobile */
-    }
+/* Centering the main title */
+h1 {
+    text-align: center; /* Center the title */
 }
+
+/* Alert Styles */
+.alert {
+    margin-bottom: 1rem; /* Margin below alerts */
+}
+
+/* Filter Styles */
+.filter {
+    margin-bottom: 1rem; /* Space below filter */
+}
+
+
+
+
 

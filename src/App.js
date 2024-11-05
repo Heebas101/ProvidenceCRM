@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import SignIn from './components/signIn';
 import DataDisplay from './components/dataDisplay';
 import { supabase } from './components/supabase';
+import Details from './components/details';
 
 const App = () => {
     const [user, setUser] = useState(null);
@@ -42,6 +43,10 @@ const App = () => {
                 <Route 
                     path="/data" 
                     element={user ? <DataDisplay /> : <Navigate to="/" />} 
+                />
+                <Route 
+                    path="/details/:inquiryId" 
+                    element={user ? <Details /> : <Navigate to="/" />} 
                 />
             </Routes>
         </Router>

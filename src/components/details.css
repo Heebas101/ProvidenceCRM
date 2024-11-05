@@ -1,0 +1,21 @@
+.details-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9; /* Optional background color */
+    border-radius: 8px; /* Optional rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+}
+
+.details-page h1 {
+    text-align: center;
+}
+
+.details-page .form-group {
+    margin-bottom: 15px;
+}
+
+.details-page .btn {
+    margin-top: 10px;
+}
+

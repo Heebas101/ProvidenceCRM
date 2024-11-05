@@ -35,7 +35,6 @@ const SignIn = ({ onSignIn }) => {
                 /> {/* Adjust width as needed */}
                 
                 <form onSubmit={handleSignIn}>
-                    <h1 className="h3 mb-3 fw-normal"></h1>
 
                     {error && <div className="alert alert-danger">{error}</div>}
 
