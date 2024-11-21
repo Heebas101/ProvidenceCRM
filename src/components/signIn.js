@@ -62,6 +62,8 @@ const SignIn = ({ onSignIn }) => {
                         <label htmlFor="floatingPassword">Password</label>
                     </div>
 
+                    <div class="g-recaptcha" data-sitekey="6LcjGoYqAAAAAMey-hY6ZqJ2KlQEJh_5eNfI0x_C"></div>
+
                     <button className="btn btn-primary w-100 py-2" type="submit">
                         Sign in
                     </button>
