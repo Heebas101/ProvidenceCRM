@@ -30,7 +30,8 @@ const DataDisplay = () => {
         const fetchData = async () => {
             const { data, error } = await supabase
                 .from('WebsiteInquiries')
-                .select('CustomerName, Country, Email, Phone, Date, Agent, id, Stage, Make, Model');
+                .select('CustomerName, Country, Email, Phone, Date, Agent, id, Stage, Make, Model')
+                .order('Date', { ascending: false });
 
             if (error) {
                 setError(error.message);

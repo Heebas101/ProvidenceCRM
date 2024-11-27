@@ -12,7 +12,7 @@
 .table th,
 .table td {
     border: 1px solid #dee2e6; /* Table border */
-    padding: 8px; /* Cell padding */
+    padding: 0 8px; /* Cell padding */
     text-align: left; /* Left align text */
     vertical-align: middle; /* Center vertically */
 }
@@ -94,6 +94,8 @@ h1 {
 .filter {
     margin-bottom: 1rem; /* Space below filter */
 }
+
+
 
 
 

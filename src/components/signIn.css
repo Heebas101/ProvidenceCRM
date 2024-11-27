@@ -23,3 +23,9 @@
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
+
+  .g-recaptcha {
+    display: inline-block; /* Ensures it appears inline within form layout */
+    height: auto !important; /* Resets the height */
+    width: auto !important; /* Ensures it scales correctly */
+}

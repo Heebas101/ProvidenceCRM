@@ -4,14 +4,16 @@ import { supabase } from './supabase';
 import './dataDisplay.css'; // Use the same CSS for styling
 
 const DetailsDisplay = () => {
-    const { id } = useParams(); // Get the id from the URL
-    const navigate = useNavigate(); // Use useNavigate for navigation
+    const { inquiryId } = useParams();
+    const numericId = Number(inquiryId);
+    const navigate = useNavigate();
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [agentNotes, setAgentNotes] = useState('');
-    const [selectedAgent, setSelectedAgent] = useState(''); // eslint-disable-next-line
-    const [selectedStage, setSelectedStage] = useState(''); // eslint-disable-next-line
+    const [selectedAgent, setSelectedAgent] = useState('');
+    const [selectedStage, setSelectedStage] = useState('');
+    const [isSaving, setIsSaving] = useState(false);
 
     const agents = ['Abdallah', 'Azam', 'Ishaak', 'Dilshard', 'Shanilka', 'Thabith', 'Thanish', 'Zubair'];
     const stages = [
@@ -21,16 +23,21 @@ const DetailsDisplay = () => {
         'Offers Made',
         'Negotiating',
         'Sold',
-        'Closed'
+        'Closed',
     ];
 
     useEffect(() => {
         const fetchDetails = async () => {
+            if (isNaN(numericId) || numericId <= 0) {
+                setError('Invalid Inquiry ID');
+                return;
+            }
+
             const { data, error } = await supabase
                 .from('WebsiteInquiries')
                 .select('CustomerName, Country, Email, Phone, Date, Agent, Stage, Make, Model, AgentNotes, Notes')
-                .eq('id', id)
-                .single(); // Fetch a single record by ID
+                .eq('id', numericId)
+                .single();
 
             if (error) {
                 setError(error.message);
@@ -43,46 +50,75 @@ const DetailsDisplay = () => {
         };
 
         fetchDetails();
-    }, [id]);
-
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString();
-    };
+    }, [numericId]);
 
     const handleSave = async () => {
+        setIsSaving(true);
+
         const updates = {
             Agent: selectedAgent,
             Stage: selectedStage,
-            AgentNotes: agentNotes
+            AgentNotes: agentNotes,
         };
 
         const { error } = await supabase
             .from('WebsiteInquiries')
             .update(updates)
-            .eq('id', id);
+            .eq('id', numericId);
 
         if (error) {
-            setError(error.message);
+            setError('Failed to save changes: ' + error.message);
         } else {
+            // Update local state with the new values
             setData((prevData) => ({
                 ...prevData,
-                ...updates
+                ...updates,
             }));
-            setIsEditing(false); // Exit editing mode
+            setIsEditing(false); // Exit edit mode
+        }
+        setIsSaving(false);
+    };
+
+    const handleLogout = async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+            setError('Logout failed: ' + error.message);
+        } else {
+            navigate('/'); // Redirect to the login page after logout
         }
     };
 
+    const goToDashboard = () => {
+        navigate('/data'); // Navigate to the dashboard page
+    };
+
     if (error) {
-        return <div className="alert alert-danger">{error}</div>;
+        return (
+            <div className="container mt-5">
+                <h1 className="text-center text-danger">Error</h1>
+                <p className="text-center">{error}</p>
+            </div>
+        );
     }
 
     if (!data) {
-        return <div>Loading...</div>; // Loading state
+        return (
+            <div className="container mt-5">
+                <h1 className="text-center">Loading...</h1>
+            </div>
+        );
     }
 
     return (
         <div className="container mt-5">
+            <div className="d-flex justify-content-between mb-4">
+                <button className="btn btn-secondary" onClick={goToDashboard}>
+                    Back to Dashboard
+                </button>
+                <button className="btn btn-danger" onClick={handleLogout}>
+                    Logout
+                </button>
+            </div>
             <h1 className="text-center">Inquiry Details</h1>
             <table className="table table-bordered mt-4">
                 <tbody>
@@ -104,7 +140,7 @@ const DetailsDisplay = () => {
                     </tr>
                     <tr>
                         <th>Date</th>
-                        <td>{formatDate(data.Date)}</td>
+                        <td>{data.Date}</td>
                     </tr>
                     <tr>
                         <th>Stage</th>
@@ -115,8 +151,10 @@ const DetailsDisplay = () => {
                                     onChange={(e) => setSelectedStage(e.target.value)}
                                     className="form-select"
                                 >
-                                    {stages.map(stage => (
-                                        <option key={stage} value={stage}>{stage}</option>
+                                    {stages.map((stage) => (
+                                        <option key={stage} value={stage}>
+                                            {stage}
+                                        </option>
                                     ))}
                                 </select>
                             ) : (
@@ -133,22 +171,16 @@ const DetailsDisplay = () => {
                                     onChange={(e) => setSelectedAgent(e.target.value)}
                                     className="form-select"
                                 >
-                                    {agents.map(agent => (
-                                        <option key={agent} value={agent}>{agent}</option>
+                                    {agents.map((agent) => (
+                                        <option key={agent} value={agent}>
+                                            {agent}
+                                        </option>
                                     ))}
                                 </select>
                             ) : (
                                 data.Agent
                             )}
                         </td>
-                    </tr>
-                    <tr>
-                        <th>Car Make</th>
-                        <td>{data.Make}</td>
-                    </tr>
-                    <tr>
-                        <th>Car Model</th>
-                        <td>{data.Model}</td>
                     </tr>
                     <tr>
                         <th>Agent Notes</th>
@@ -170,22 +202,31 @@ const DetailsDisplay = () => {
                     </tr>
                 </tbody>
             </table>
-            <div className="d-flex justify-content-center mt-4">
-    {isEditing ? (
-        <button className="btn btn-success me-2" onClick={handleSave}>Save Changes</button>
-    ) : (
-        <button className="btn btn-primary me-2 btn-lg" onClick={() => setIsEditing(true)}>Edit</button>
-    )}
-    <button className="btn btn-secondary" onClick={() => navigate('/')}>Back to Dashboard</button>
-</div>
+            <div className="text-center mt-4">
+                {isEditing ? (
+                    <button
+                        className="btn btn-success me-2"
+                        onClick={handleSave}
+                        disabled={isSaving}
+                    >
+                        {isSaving ? 'Saving...' : 'Save'}
+                    </button>
+                ) : (
+                    <button className="btn btn-primary" onClick={() => setIsEditing(true)}>
+                        Edit
+                    </button>
+                )}
+                {isEditing && (
+                    <button
+                        className="btn btn-secondary"
+                        onClick={() => setIsEditing(false)}
+                    >
+                        Cancel
+                    </button>
+                )}
+            </div>
         </div>
     );
 };
 
 export default DetailsDisplay;
-
-
-
-
-
-
